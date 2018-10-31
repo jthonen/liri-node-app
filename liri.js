@@ -1,30 +1,36 @@
-var fs = require("fs");
-
-// Require dotenv for API keys... 
 require("dotenv").config();
+var Spotify = require("node-spotify-api");
+var keys = require("./keys");
+var request = require("request");
+var moment = require("moment");
+var fs = require("fs");
+var request = require("request"); 
+var spotify = new Spotify(keys.spotify);
+// Require dotenv for API keys... 
 
 //Let's user know what commands are before anything happens... 
-console.log("Options: concert-this | spotify-this-song | movie-this | do-what-it-says");
-var command = parseInt(process.argv[3]);
+//console.log("Options: concert-this | spotify-this-song | movie-this | do-what-it-says");
+var command = process.argv[2];
+var searchItem = process.argv[3];
 
 // Switch statement to control what function gets run and when...
 switch (command) {
-    case ("concert-this"):
+    case "concert-this":
         //run function callback bands in town
         bandsintownq();
         console.log("Running Concert Query>>>");
         break;
-    case ("spotify-this-song"):
+    case "spotify-this-song":
         //run function callback spotify
         spotifyq();
         console.log("Running Spotify Query>>>");
         break;
-    case ("movie-this"):
+    case "movie-this":
         //run funciton callback omdb
         omdbq();
         console.log("Running OMDB Query>>>");
         break;
-    case ("do-what-it-says"):
+    case "do-what-it-says":
         //run function callback ???
         dothething();
         console.log("I did the thing>>>");
@@ -39,16 +45,17 @@ function bandsintownq() {
     //* Name of the venue
     //* Venue location
     //* Date of the Event (use moment to format this as "MM/DD/YYYY")
-    var input = command[4]
+    var input = command[4];
     var queryURL = "https://rest.bandsintown.com/artists/" + input + "/events?app_id=codingbootcamp";
-    request(queryURL), function(error, repsonse) {
-        if (err) {
-            return err;
+        
+        request(queryURL), function(error, repsonse) {
+            if (err) {
+                return err;
+            }
+            else {
+                var results = JSON.parse(response.body);
+            }
         }
-        else {
-            var results = JSON.parse(response.body);
-        }
-    }
     
     var bandName = '';
     var venueLocal = '';
@@ -58,7 +65,6 @@ function bandsintownq() {
 
 function spotifyq() {
     //export spotify key to keys.js
-    var spotify = new spotify(keys.spotify);
     
     // spotify api query 
     // Make sure to respond with the following.
@@ -66,8 +72,28 @@ function spotifyq() {
     // * The song's nams
     // * A preview link of the song from Spotify
     // * The album that the song is from
-    var input = command[4]
-    var queryurl = ""
+    // var input = process.argv[3];
+    // console.log(input);
+    // if (input === undefined) {
+    //     input = "The Sign";
+    // };
+    spotify.search({
+        type: "track",
+        query: "Hey Jude"
+    },
+    function(err, data) {
+        if (err) {
+            console.log("There is an error man, this is what it said: " + err);
+            return;
+        }
+
+       console.log(data);
+
+        // for (var i = 0; i<songs.length; i++) {
+        //     console.log(i);
+        //     console.log("artist")
+        // }
+    })
 };
 
 function omdbq() {
@@ -82,7 +108,7 @@ function omdbq() {
     // * Plot of the movie.
     // * Actors in the movie.
     // if input from user is blank return info for "Mr.Nobody"
-    var input = command[4]
+    
 
 };
 
