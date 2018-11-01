@@ -79,20 +79,20 @@ function spotifyq() {
     // };
     spotify.search({
         type: "track",
-        query: "Hey Jude"
+        query: searchItem
     },
     function(err, data) {
         if (err) {
             console.log("There is an error man, this is what it said: " + err);
             return;
         }
+        var songData = data.tracks.items;
+        // console.log(songData);
 
-       console.log(data);
-
-        // for (var i = 0; i<songs.length; i++) {
-        //     console.log(i);
-        //     console.log("artist")
-        // }
+        for (var i = 0; i<songData.length; i++) {
+            console.log(i);
+            console.log(songs[i].artist.name);
+        }
     })
 };
 
