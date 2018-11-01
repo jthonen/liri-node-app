@@ -1,15 +1,11 @@
+// Require dotenv for API keys... 
 require("dotenv").config();
 var Spotify = require("node-spotify-api");
 var keys = require("./keys");
 var request = require("request");
 var moment = require("moment");
 var fs = require("fs");
-var request = require("request"); 
 var spotify = new Spotify(keys.spotify);
-// Require dotenv for API keys... 
-
-//Let's user know what commands are before anything happens... 
-//console.log("Options: concert-this | spotify-this-song | movie-this | do-what-it-says");
 var command = process.argv[2];
 var searchItem = process.argv[3];
 
@@ -87,34 +83,57 @@ function spotifyq() {
             return;
         }
         var songData = data.tracks.items;
-        // console.log(songData);
+        console.log(songData[0].name);
 
-        for (var i = 0; i<songData.length; i++) {
-            console.log(i);
-            console.log(songs[i].artist.name);
+        for (var i = 0; i<3; i++) {
+            // console.log(i+1);
+            // console.log("Artist(s): " + songData[i].album);
+            // console.log("Song Name: " + songData[i].name);
+            // console.log("Listen for yourself: " + songData[i].album.external_urls_spotify);
+            
         }
     })
 };
-
+ 
 function omdbq() {
-    // OMDB api query search
-    // Make sure to respond with the following.
-    // * Title of the movie.
-    // * Year the movie came out.
-    // * IMDB Rating of the movie.
-    // * Rotten Tomatoes Rating of the movie.
-    // * Country where the movie was produced.
-    // * Language of the movie.
-    // * Plot of the movie.
-    // * Actors in the movie.
-    // if input from user is blank return info for "Mr.Nobody"
-    
 
-};
+    if (searchItem === undefined) {
+        searchItem = "Mr Nobody";
+    };
+
+    var queryUrl = "http://www.omdbapi.com/?t=" + searchItem + "&y=&plot=full&tomatoes=true&apikey=trilogy";
+
+    request(queryUrl, function(error, response, body) {
+        
+        if (!error && response.statusCode === 200) {
+            var parsedData = JSON.parse(body);
+            //console.log(parsedData);
+
+            console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            console.log("Title: " + parsedData.Title);
+            console.log("Year: " + parsedData.Year);
+            console.log("Rated: " + parsedData.Rated);
+            console.log("IMDB Rating: " + parsedData.imdbRating);
+            console.log("RT Rating: " + parsedData.Ratings[1].Value);
+            console.log("Country: " + parsedData.Country);
+            console.log("Language: " + parsedData.Language);
+            console.log("Plot: " + parsedData.Plot);
+            console.log("Actors: " + parsedData.Actors);
+            console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            
+}})};
 
 function dothething() {
-    // do the thing function defined
-    //
 
-    var input = command[4]
-}
+    fs.readFile("random.txt", "utf8", function(error, data) {
+        console.log(data);
+
+        var dataArr = data.split(',');
+
+        if (dataArr === 2) {
+            pick(dataArr[0], dataArr[1]);
+        } else if (dataArr.Length === 1) {
+            pick(dataArr[0]);
+        };
+
+    });};
