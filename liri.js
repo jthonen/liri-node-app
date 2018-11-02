@@ -1,4 +1,4 @@
- require("dotenv").config();
+require("dotenv").config();
 var Spotify = require("node-spotify-api");
 var keys = require("./keys");
 var request = require("request");
@@ -39,7 +39,6 @@ function bandsintownq() {
 
                 if (!parsedData.length) {
                     console.log("nada for " + searchItem);
-                    //return;
                 };
 
                 console.log("Concerts for: " + searchItem);
@@ -59,36 +58,32 @@ function bandsintownq() {
 }};});};
 
 function spotifyq() {
-    //export spotify key to keys.js
-    
-    // spotify api query 
-    // Make sure to respond with the following.
-    // * Artist(s)
-    // * The song's nams
-    // * A preview link of the song from Spotify
-    // * The album that the song is from
-    // var input = process.argv[3];
-    // console.log(input);
-    // if (input === undefined) {
-    //     input = "The Sign";
-    // };
+
+    if (searchItem === undefined) {
+        searchItem = "The Sign";
+    };
     spotify.search({
         type: "track",
         query: searchItem
     },
     function(err, data) {
+
         if (err) {
             console.log("There is an error man, this is what it said: " + err);
             return;
-        }
-        var songData = data.tracks.items;
-        console.log(songData[0].name);
+        };
 
-        for (var i = 0; i<3; i++) {
+        var songData = data.tracks.items;
+
+        for (var i = 0; i<1; i++) {
+
+            console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
             // console.log(i+1);
-            // console.log("Artist(s): " + songData[i].album);
-            // console.log("Song Name: " + songData[i].name);
-            // console.log("Listen for yourself: " + songData[i].album.external_urls_spotify);
+            console.log("Artist(s): " + songData[i].album.artists[0].name);
+            console.log("Song Name: " + songData[i].name);
+            console.log("Listen for yourself: " + songData[i].album.external_urls.spotify);
+            console.log("Album Name: " + songData[i].album.name);
+            console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
             
 }})};
  
@@ -104,7 +99,6 @@ function omdbq() {
         
         if (!error && response.statusCode === 200) {
             var parsedData = JSON.parse(body);
-            //console.log(parsedData);
 
             console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
             console.log("Title: " + parsedData.Title);
