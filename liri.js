@@ -1,5 +1,4 @@
-// Require dotenv for API keys... 
-require("dotenv").config();
+ require("dotenv").config();
 var Spotify = require("node-spotify-api");
 var keys = require("./keys");
 var request = require("request");
@@ -9,25 +8,20 @@ var spotify = new Spotify(keys.spotify);
 var command = process.argv[2];
 var searchItem = process.argv[3];
 
-// Switch statement to control what function gets run and when...
 switch (command) {
     case "concert-this":
-        //run function callback bands in town
         bandsintownq();
         console.log("Running Concert Query>>>");
         break;
     case "spotify-this-song":
-        //run function callback spotify
         spotifyq();
         console.log("Running Spotify Query>>>");
         break;
     case "movie-this":
-        //run funciton callback omdb
         omdbq();
         console.log("Running OMDB Query>>>");
         break;
     case "do-what-it-says":
-        //run function callback ???
         dothething();
         console.log("I did the thing>>>");
         break;
@@ -36,28 +30,33 @@ switch (command) {
 };
 
 function bandsintownq() {
-    //bandsintown api query (when i get my key)
-    // Make sure to respond with the following.
-    //* Name of the venue
-    //* Venue location
-    //* Date of the Event (use moment to format this as "MM/DD/YYYY")
-    var input = command[4];
-    var queryURL = "https://rest.bandsintown.com/artists/" + input + "/events?app_id=codingbootcamp";
+  
+    var queryURL = "https://rest.bandsintown.com/artists/" + searchItem + "/events?app_id=codingbootcamp";
         
-        request(queryURL), function(error, repsonse) {
-            if (err) {
-                return err;
-            }
-            else {
-                var results = JSON.parse(response.body);
-            }
-        }
-    
-    var bandName = '';
-    var venueLocal = '';
-    var eventDate = '';
+        request(queryURL, function(error, response, body) {
+            if (!error && response.statusCode === 200) {
+                var parsedData = JSON.parse(body);
 
-};
+                if (!parsedData.length) {
+                    console.log("nada for " + searchItem);
+                    //return;
+                };
+
+                console.log("Concerts for: " + searchItem);
+
+                for (var i = 0; i < parsedData.length; i++) {
+                    var show = parsedData[i];
+                    var dateProper = moment(show.datetime).format("MM/DD/YYYY");
+                    
+                    console.log(">>>>>>>>>>>>><<<<<<<<<<<<<<<<");
+                    console.log("Venue: " + show.venue.name);
+                    console.log("City: " + show.venue.city);
+                    console.log("Country: " + show.venue.country);
+                    console.log("Date: " + dateProper);
+                    console.log(">>>>>>>>>>>>><<<<<<<<<<<<<<<<");
+                    console.log(" ");
+
+}};});};
 
 function spotifyq() {
     //export spotify key to keys.js
@@ -91,9 +90,7 @@ function spotifyq() {
             // console.log("Song Name: " + songData[i].name);
             // console.log("Listen for yourself: " + songData[i].album.external_urls_spotify);
             
-        }
-    })
-};
+}})};
  
 function omdbq() {
 
@@ -128,12 +125,12 @@ function dothething() {
     fs.readFile("random.txt", "utf8", function(error, data) {
         console.log(data);
 
-        var dataArr = data.split(',');
+        var dataArray = data.split(',');
 
-        if (dataArr === 2) {
-            pick(dataArr[0], dataArr[1]);
-        } else if (dataArr.Length === 1) {
-            pick(dataArr[0]);
+        if (dataArray === 2) {
+            pick(dataArr[0], dataArray[1]);
+        } else if (dataArray.Length === 1) {
+            pick(dataArray[0]);
         };
 
-    });};
+});};
